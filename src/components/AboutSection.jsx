@@ -332,7 +332,7 @@ export default function AboutSection() {
               <div
                 ref={terminalBodyRef}
                 className="p-3.5 font-mono text-xs space-y-1.5 overflow-y-auto"
-                style={{ minHeight: 200, maxHeight: 250 }}
+                style={{ height: 270 }}
               >
                 {history.map((item, idx) => (
                   <div key={idx} className="leading-relaxed">
