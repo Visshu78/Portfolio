@@ -231,14 +231,14 @@ export default function AboutSection() {
           </p>
         </div>
 
-        {/* Main Balanced Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* Left: Engineer's Notebook & Skills (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+          <div className="lg:col-span-7 space-y-6">
 
             {/* Notebook Card */}
-            <div className="card p-6 sm:p-7 reveal flex-1">
+            <div className="card p-6 sm:p-7 reveal">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-subtle)]">
                 <span className="font-mono text-xs font-bold text-[var(--cyan)]">
                   ENGINEER_NOTEBOOK // {profileData.name.toUpperCase()}
@@ -267,7 +267,7 @@ export default function AboutSection() {
             </div>
 
             {/* Skills Matrix */}
-            <div className="card p-6 sm:p-7 reveal flex-1" data-delay="80">
+            <div className="card p-6 sm:p-7 reveal" data-delay="80">
               <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[var(--border-subtle)]">
                 <span className="font-mono text-xs font-bold text-[var(--cyan)]">
                   SYSTEM_CAPABILITIES // SKILLS MATRIX
@@ -297,7 +297,7 @@ export default function AboutSection() {
           </div>
 
           {/* Right: Active Terminal + Contact (5 cols) */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+          <div className="lg:col-span-5 space-y-6">
 
             {/* Active Developer Terminal */}
             <div
@@ -332,7 +332,7 @@ export default function AboutSection() {
               <div
                 ref={terminalBodyRef}
                 className="p-3.5 font-mono text-xs space-y-1.5 overflow-y-auto"
-                style={{ height: 165 }}
+                style={{ minHeight: 200, maxHeight: 250 }}
               >
                 {history.map((item, idx) => (
                   <div key={idx} className="leading-relaxed">
