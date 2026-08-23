@@ -1,0 +1,166 @@
+VISHAL DHAWAL
+Portfolio Content Sheet — Computer Vision & Applied AI
+This is the content sheet for Antigravity. The portfolio presents Vishal primarily as a Computer Vision & Applied AI Engineer, with supporting strengths in Deep Learning, AI systems, RAG/NLP, research, engineering, and creative writing.
+1. Personal / About
+Full name: Vishal Dhawal
+Role / title: Computer Vision & Applied AI Engineer
+Bio / tagline: I build intelligent systems that see, understand, and act on real-world information. My work sits at the intersection of Computer Vision, Deep Learning, Applied AI, and practical research, with a focus on turning experimental ideas into usable systems.
+Currently working on: Computer Vision and Deep Learning systems; cybercrime investigation and legal intelligence using RAG; AI/ML experiments; Edge AI and deployment-oriented vision systems; and deeper exploration of advanced Computer Vision.
+Interests: Computer Vision, Deep Learning, image understanding, object detection/localization, Edge AI, PyTorch, CUDA, NLP, LLMs, RAG, information retrieval, multimodal AI, efficient vision models, high-resolution imagery, on-device AI, and AI for real-world investigation.
+Outside code: Poetry, personal writing and reflections, music, exploring ideas, conversations, observation, and creative experimentation.
+Email: vishaldhawal8853@gmail.com
+LinkedIn: https://www.linkedin.com/in/vishal-dhawal-b69163327/
+GitHub: https://github.com/Visshu78
+2. SEE — Computer Vision Projects
+01 — GCP Marker Localization & Shape Classification
+Category: Aerial Computer Vision · High-Resolution Vision
+Description: Multi-task pipeline for localizing and classifying GCP markers in 4096×3000 aerial drone imagery.
+Metrics: 20.32 px mean localization error; ~100% shape classification accuracy; ~1.0 Macro-F1; inference across 300 unlabeled test images.
+Tech stack: Python, PyTorch, EfficientNet-B3, OpenCV, Albumentations, keypoint-aware augmentation, GroupKFold, tiled inference.
+Problem: High-resolution images made small/off-center targets difficult to learn efficiently.
+Approach: Used 512×512 crop-based training, keypoint-aware augmentation, leakage-safe GroupKFold by project/survey/GCP, and tiled inference.
+Failure / lesson: Random image-level splitting could leak correlated visual information across the same survey/project. Group-based splitting produced a more reliable evaluation.
+GitHub: https://github.com/Visshu78/Aerial_GCP_Pose
+02 — Britannia Biscuit Vision Inspection
+Category: Industrial Computer Vision · Edge AI
+Description: Edge-based industrial vision inspection system designed to analyze biscuits on a moving production conveyor.
+Metrics: Prototype/system-design project; production accuracy and latency metrics to be added if available.
+Tech stack: NVIDIA Jetson Orin NX 16GB, OpenCV, Deep Learning, global-shutter cameras, industrial imaging, stereo/depth vision.
+Problem: Moving-conveyor inspection requires reliable imaging despite motion, lighting, optics, and physical installation constraints.
+Approach: Designed camera → acquisition → vision inference → edge-side quality analysis, with attention to global shutter, camera positioning, illumination, depth sensing, and Jetson deployment.
+Failure / lesson: Industrial CV is not only a model-selection problem; imaging hardware, lighting, motion, optics, and deployment can dominate the outcome.
+GitHub: Private
+03 — Geographic Hotspot Visualization & Clustering
+Category: Geospatial AI · Data Visualization
+Description: Geographic intelligence system for clustering location records and generating spatial hotspot boundaries.
+Metrics: 166 hulls generated for the Agra dataset.
+Tech stack: Python, Pandas, Scikit-learn, Folium, clustering, convex hulls, Excel/data processing.
+Problem: Raw latitude/longitude records are difficult to interpret directly.
+Approach: Raw data → validation → spatial clustering → hull generation → interactive map.
+Failure / lesson: A correct clustering result is not automatically useful; visualization became part of the intelligence pipeline.
+GitHub: Private / link to be provided
+04 — VisionControl
+Category: Human-Computer Interaction · Computer Vision
+Description: Computer-vision-driven interactive control system using visual input for computer interaction.
+Metrics: Real-time project; exact metrics to be added if available.
+Tech stack: Python, OpenCV, Computer Vision, real-time processing.
+Problem: Enable interaction through visual gestures/actions rather than conventional input.
+Approach: Visual input → gesture/feature detection → command mapping → system interaction.
+Failure / lesson: Real-time CV must balance accuracy, latency, robustness, and usability.
+GitHub: https://github.com/Visshu78/VisionControl
+05 — Visual Intelligence Experiments
+Category: Real-Time Computer Vision
+Description: Exploratory collection covering eye control, gesture interaction, face recognition, and real-time vision.
+Metrics: Individual experiment metrics to be added where available.
+Tech stack: Python, OpenCV, RetinaFace, ArcFace, YOLO-family models, real-time vision.
+Problem: Explore how visual signals can become useful interactions, recognition, and decisions.
+Approach: Built/tested eye-control, gesture, facial recognition, and detection experiments.
+Failure / lesson: These experiments highlighted the gap between controlled demos and robust real-time systems.
+GitHub: Multiple / links to be provided
+3. BUILD — Systems Projects
+01 — CYBORG — On-Device Cybercrime RAG Assistant
+Description: Fully offline mobile RAG assistant for grounded cybercrime investigation guidance.
+Tech stack: Gemma 3 1B, llama.rn, MiniLM-L6-v2, ONNX, BM25, dense retrieval, RRF, mobile inference.
+Architecture: User Query → Query Processing → Hybrid Retrieval → RRF → Local LLM → Progressive Streaming.
+Key highlights:
+4-bit Gemma 3 1B with <1.2 GB peak RAM.
+Hybrid BM25 + dense retrieval with RRF.
+~50 ms initial SOP response in the tested fast path; 0% refusal rate in the tested law-enforcement prompt benchmark.
+GitHub: Private / link to be provided
+02 — TeleWire
+Description: Real-time Telegram threat-intelligence platform combining asynchronous ingestion, NLP, OCR, entity extraction, and risk scoring.
+Tech stack: Python, Telegram APIs, Sentence Transformers, FAISS, zero-shot NLP, OCR, Flask, Streamlit, SQLite, REST/Webhooks.
+Architecture: Telegram → Async Ingestion → Worker Pipeline → NLP/OCR → Entity Extraction → Risk Scoring → Intelligence Interface.
+Key highlights:
+Real-time asynchronous ingestion and concurrent workers.
+Semantic similarity, vector search, entity extraction, and OCR.
+Composite threat-risk scoring and intelligence visualization.
+GitHub: Link to be provided
+03 — MindBridge / Aether Voice Pipeline
+Description: Real-time voice interaction pipeline connecting browser audio, WebRTC signaling, backend processing, and AI services.
+Tech stack: WebRTC, Node.js, Express, Socket.IO, Python, Streamlit, ngrok, Docker.
+Architecture: Browser → WebRTC → Signaling Server → Backend → AI/Voice Pipeline → Client.
+Key highlights:
+Real-time communication architecture.
+WebRTC signaling and browser/backend coordination.
+AI voice pipeline integration with deployment/tunneling infrastructure.
+GitHub: Link to be provided
+4. RESEARCH — Experiments
+01 — Crop-based learning for high-resolution imagery
+Hypothesis: Training on strategically selected 512×512 crops should improve learning of small/off-center GCP markers versus full-image training.
+Finding: The EfficientNet-B3 crop pipeline achieved 20.32 px localization error and ~1.0 Macro-F1.
+Lesson: For high-resolution imagery, where the model looks can matter as much as what model is used.
+02 — Leakage-safe grouping improves evaluation reliability
+Hypothesis: Random image-level splitting can overestimate generalization when images originate from the same survey/project.
+Finding: Grouping by project/survey/GCP provides a more reliable evaluation setup.
+Lesson: Dataset design is part of model design.
+03 — Hybrid retrieval for grounded legal/operational AI
+Hypothesis: Combining lexical and dense retrieval should be more robust than relying on either alone.
+Finding: BM25 + dense retrieval + RRF was used as the grounding layer for the offline cybercrime/legal assistant.
+Lesson: Semantic similarity alone is not enough when exact statutory language, terminology, or procedural phrases matter.
+Failed Experiments / Research Lessons
+Random image-level splitting
+Tried: Random train/validation splitting.
+Problem: Correlated images from the same survey/project can leak visual information across splits.
+Changed: Changed to GroupKFold using project/survey/GCP grouping.
+Lesson: Evaluation must model the actual generalization scenario.
+Treating industrial CV as purely a model problem
+Tried: Focused primarily on model selection.
+Problem: Camera motion, shutter behavior, illumination, lens choice, and installation can dominate system performance.
+Changed: Expanded the design to global-shutter cameras, camera placement, lighting, depth sensing, and edge hardware.
+Lesson: Industrial Computer Vision is an imaging + ML + systems problem.
+5. LAB — Living Experiments
+LAB_001 — Vision Transformers
+Status: EXPERIMENTING
+Tech: PyTorch, Transformers, Computer Vision
+Current note: Exploring transformer-based visual representations and comparing them with conventional CNN approaches.
+LAB_002 — 3D CNN / Spatiotemporal Vision
+Status: EXPERIMENTING
+Tech: PyTorch, 3D CNNs
+Current note: Exploring spatial and temporal representation learning.
+LAB_003 — RAG Retrieval Experiments
+Status: IMPROVING
+Tech: Sentence Transformers, FAISS, BM25, LLMs
+Current note: Exploring hybrid retrieval, semantic search, reranking, chunking, embeddings, and grounding.
+LAB_004 — Edge AI
+Status: BUILDING
+Tech: PyTorch, ONNX, CUDA, Jetson, quantization
+Current note: Exploring how to move models from notebooks to real hardware under latency, memory, and deployment constraints.
+6. WRITE — Essays & Poetry
+Technical Essay — Teaching Machines to See
+A personal/technical essay about the journey into Computer Vision: why visual intelligence is interesting, the difference between recognizing an image and understanding it, the evolution from CNNs to modern vision models, lessons from practical projects, and why Computer Vision remains the core specialization.
+Technical Essay — A Model Is Not a System
+An essay arguing that a high validation score does not guarantee a useful real-world AI system. Use industrial inspection, high-resolution imagery, camera selection, edge deployment, latency, memory, data leakage, and deployment constraints to explain the difference between a model and a system.
+Poetry / Reflection — Some Nights
+Use the existing poem beginning with “Some nights, we don't want answers— we just want the noise inside us to become quiet.” Theme: healing, unanswered questions, acceptance, memory, and growing up. Insert the final approved poem text rather than generating a replacement.
+Additional Poetry / Reflections
+Add two additional existing poems/reflections from Vishal's writing archive, preserving their original text and titles.
+7. Skills
+Computer Vision & Edge
+OpenCV · Image Processing · Object Detection · Image Classification · Image Localization · Keypoint Detection · Face Recognition · Gesture Recognition · High-Resolution Vision · Geospatial Visualization · Industrial Vision · Real-Time Vision · Edge AI · Jetson · ONNX · CUDA
+Deep Learning & Applied AI
+PyTorch · TensorFlow · Keras · Scikit-learn · EfficientNet · CNNs · 3D CNNs · Transformers · Hugging Face · Sentence Transformers · LLMs · RAG · Embeddings · Semantic Search · Hybrid Retrieval · FAISS · BM25 · Zero-shot NLP · OCR
+Systems & Infrastructure
+Python · C/C++ exposure · Node.js · Express · Socket.IO · WebRTC · REST APIs · SQLite · Docker · Docker Compose · Linux · SSH · ngrok · Streamlit · Git/GitHub
+Research / Methods
+Experimental Design · Model Evaluation · Cross-validation · GroupKFold · Data Leakage Prevention · Data Preprocessing · Augmentation · Tiled Inference · Model Optimization · Quantization · Retrieval Evaluation · Error Analysis · Visualization
+Creative / Communication
+Technical Writing · Research Communication · Poetry · Visual Storytelling · System Visualization · Documentation · Presentation
+8. Antigravity Content Direction
+Central identity: COMPUTER VISION & APPLIED AI.
+Central narrative: A WAY TO SEE THINGS.
+Primary progression: SEE → THINK → BUILD → INVESTIGATE → WRITE.
+Computer Vision receives the strongest visual treatment; Applied AI connects CV, RAG/NLP, systems, and real-world applications.
+Use project case studies instead of simple project cards.
+Use visual motifs based on observation, focus, framing, depth, and detection.
+Integrate poetry and reflection subtly as the human layer.
+Avoid a generic skills-first developer portfolio.
+Final impression: a technically serious engineer who builds, experiments, investigates, and thinks deeply.
+9. Information Still To Be Supplied
+Exact email address.
+Exact LinkedIn URL.
+Final GitHub links for each public project.
+Exact metrics where currently unavailable.
+Final text of remaining poems/reflections.
+Exact details of additional failed experiments, if available.
+Project screenshots/demo URLs.
