@@ -53,12 +53,12 @@ export const workExperience = [
   },
   {
     id: "mindquest-mentor",
-    role: "Mentor & Operations Lead",
+    role: "Mentor",
     organization: "MindQuest Mental Wellness Club — IIIT Kottayam",
     location: "IIIT Kottayam",
     period: "Sept 2025 — Aug 2026",
-    type: "Leadership & Operations",
-    badge: "MENTORSHIP & SCALE",
+    type: "Mentorship",
+    badge: "MENTORSHIP",
     badgeColor: "var(--amber)",
     highlights: [
       "Led a 35–40 member volunteer team across 6 institutional events, coordinating operations, task execution, and event activities.",
