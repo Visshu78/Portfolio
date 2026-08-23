@@ -12,7 +12,7 @@ export default function ExperienceSection() {
       className="relative py-28 px-6 lg:px-10 border-t border-[var(--border-subtle)]"
       style={{ background: 'var(--bg-surface)' }}
     >
-      <div className="section-num">03</div>
+      <div className="section-num">01</div>
       <div className="max-w-7xl mx-auto">
 
         {/* ── Section Header ── */}
@@ -21,7 +21,7 @@ export default function ExperienceSection() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--cyan)]"
             style={{ background: 'rgba(0,240,255,0.06)', border: '1px solid rgba(0,240,255,0.2)' }}
           >
-            <Briefcase size={13} /> 03 / EXPERIENCE & EDUCATION
+            <Briefcase size={13} /> 01 / EXPERIENCE & EDUCATION
           </div>
           <h2
             className="font-display font-extrabold text-[var(--text-main)] mb-4 reveal"

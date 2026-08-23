@@ -86,7 +86,7 @@ export default function SeeSection({ onOpenCaseStudy }) {
       className="relative py-28 px-6 lg:px-10 border-t border-[var(--border-subtle)]"
       style={{ background: 'var(--bg-surface)' }}
     >
-      <div className="section-num">01</div>
+      <div className="section-num">02</div>
 
       <div className="max-w-7xl mx-auto">
         {/* ── Header ── */}
@@ -95,7 +95,7 @@ export default function SeeSection({ onOpenCaseStudy }) {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--cyan)]"
             style={{ background: 'rgba(0,240,255,0.06)', border: '1px solid rgba(0,240,255,0.2)' }}
           >
-            <Eye size={13} /> 01 / COMPUTER VISION & VISUAL INTELLIGENCE
+            <Eye size={13} /> 02 / COMPUTER VISION & VISUAL INTELLIGENCE
           </div>
           <h2
             className="font-display font-extrabold text-[var(--text-main)] mb-4 reveal"

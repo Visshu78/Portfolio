@@ -5,9 +5,9 @@ import { profileData } from '../data/profile';
 
 const NAV = [
   { id: 'hero',       label: 'HOME' },
+  { id: 'experience', label: 'EXPERIENCE' },
   { id: 'see',        label: 'SEE' },
   { id: 'build',      label: 'BUILD' },
-  { id: 'experience', label: 'EXPERIENCE' },
   { id: 'lab',        label: 'LAB' },
   { id: 'write',      label: 'WRITE' },
   { id: 'about',      label: 'ABOUT' },

@@ -27,7 +27,7 @@ export default function App() {
 
   // Active section tracking
   useEffect(() => {
-    const sections = ['hero', 'see', 'build', 'experience', 'lab', 'write', 'about'];
+    const sections = ['hero', 'experience', 'see', 'build', 'lab', 'write', 'about'];
     const onScroll = () => {
       const pos = window.scrollY + 220;
       for (const id of sections) {
@@ -54,9 +54,9 @@ export default function App() {
 
       <main>
         <Hero onNavigate={handleNavigate} />
+        <ExperienceSection />
         <SeeSection onOpenCaseStudy={(proj) => setSelectedProject(proj)} />
         <BuildSection />
-        <ExperienceSection />
         <LabSection />
         <WriteSection onOpenArchive={() => setIsArchiveOpen(true)} />
         <AboutSection />

@@ -20,7 +20,7 @@ export default function BuildSection() {
       className="relative py-28 px-6 lg:px-10 border-t border-[var(--border-subtle)]"
       style={{ background: 'var(--bg-base)' }}
     >
-      <div className="section-num">02</div>
+      <div className="section-num">03</div>
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
@@ -29,7 +29,7 @@ export default function BuildSection() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--emerald)]"
             style={{ background: 'rgba(16,240,128,0.06)', border: '1px solid rgba(16,240,128,0.2)' }}
           >
-            <Cpu size={13} /> 02 / SYSTEMS & APPLIED AI INFRASTRUCTURE
+            <Cpu size={13} /> 03 / SYSTEMS & APPLIED AI INFRASTRUCTURE
           </div>
           <h2
             className="font-display font-extrabold text-[var(--text-main)] mb-4 reveal"
