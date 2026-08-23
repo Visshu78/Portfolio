@@ -27,8 +27,8 @@ export const profileData = {
       category: "Computer Vision & Edge",
       skills: [
         "OpenCV", "Image Processing", "Object Detection", "Image Classification",
-        "Face Recognition", "Gesture Recognition", "High-Resolution Vision", "Real-Time Vision",
-        "Edge AI", "Jetson", "ONNX", "CUDA"
+        "Face Recognition", "Gesture Recognition", "High-Resolution Vision", "Edge AI", "Real-Time Vision",
+        "Jetson", "ONNX", "CUDA"
       ]
     },
     {
