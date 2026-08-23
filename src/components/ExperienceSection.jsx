@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { workExperience, educationHistory, certifications } from '../data/experience';
-import { Briefcase, GraduationCap, Award, Calendar, MapPin, ChevronRight, CheckCircle2, Sparkles, Building2 } from 'lucide-react';
+import { Briefcase, GraduationCap, Award, Calendar, MapPin, ChevronRight, CheckCircle2, Sparkles, Building2, BookOpen } from 'lucide-react';
 
 export default function ExperienceSection() {
   const [selectedExpId, setSelectedExpId] = useState(workExperience[0].id);
@@ -18,25 +18,130 @@ export default function ExperienceSection() {
         {/* ── Section Header ── */}
         <div className="mb-16 reveal">
           <div
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--cyan)]"
-            style={{ background: 'rgba(0,240,255,0.06)', border: '1px solid rgba(0,240,255,0.2)' }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--emerald)]"
+            style={{ background: 'rgba(16,240,128,0.06)', border: '1px solid rgba(16,240,128,0.2)' }}
           >
-            <Briefcase size={13} /> 01 / EXPERIENCE & EDUCATION
+            <GraduationCap size={13} /> 01 / EDUCATION & EXPERIENCE
           </div>
           <h2
             className="font-display font-extrabold text-[var(--text-main)] mb-4 reveal"
             style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1 }}
           >
-            Field Experience,<br />
-            <span style={{ color: 'var(--cyan)' }}>Engineering & Education</span>
+            Academic Foundations &<br />
+            <span style={{ color: 'var(--emerald)' }}>Field Experience</span>
           </h2>
           <p className="text-[var(--text-secondary)] max-w-2xl text-base leading-relaxed reveal" data-delay="100">
-            Applying machine learning and computer vision pipelines in production, leading technical campus initiatives, and building strong theoretical foundations in Computer Science.
+            Rigorous academic foundations in Computer Science, specialized minor in advanced technologies, and real-world applied machine learning deployments.
           </p>
         </div>
 
-        {/* ── WORK EXPERIENCE INTERACTIVE EXPLORER ── */}
+        {/* ══════════════════════════════════════════════════
+            PART 1: ACADEMIC BACKGROUND & EDUCATION FIRST
+        ══════════════════════════════════════════════════ */}
         <div className="mb-20">
+          <div className="flex items-center gap-2 font-mono text-xs text-[var(--emerald)] uppercase tracking-wider mb-6 pb-2 border-b border-[var(--border-subtle)]">
+            <GraduationCap size={15} />
+            <span>Academic Background, Degrees & Certifications</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Degrees (7 cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              {educationHistory.map((edu) => (
+                <div
+                  key={edu.id}
+                  className="card p-6 sm:p-7 relative overflow-hidden transition-all hover:border-[rgba(16,240,128,0.4)]"
+                  style={{ background: 'rgba(11,13,19,0.7)', borderColor: 'rgba(16,240,128,0.25)' }}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span className="font-mono text-xs text-[var(--emerald)] font-bold">
+                      {edu.period}
+                    </span>
+                    <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[rgba(16,240,128,0.1)] text-[var(--emerald)] border border-[rgba(16,240,128,0.3)]">
+                      GPA: {edu.gpa}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-xl text-[var(--text-main)] mb-1.5">
+                    {edu.degree}
+                  </h3>
+
+                  <div className="text-sm font-medium text-[var(--text-secondary)] mb-4 flex items-center gap-1.5">
+                    <Building2 size={14} className="text-[var(--emerald)]" />
+                    <span>{edu.institution}</span>
+                  </div>
+
+                  <ul className="space-y-2 pt-3 border-t border-[var(--border-subtle)]">
+                    {edu.highlights.map((h, i) => (
+                      <li key={i} className="text-xs text-[var(--text-secondary)] leading-relaxed flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] shrink-0 mt-1.5" />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* Certifications (5 cols) */}
+            <div className="lg:col-span-5 space-y-5">
+              <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--warm)] flex items-center gap-2">
+                <Award size={14} /> Verified Certifications
+              </h4>
+
+              <div className="space-y-3">
+                {certifications.map((c, i) => (
+                  <div
+                    key={i}
+                    className="card p-5"
+                    style={{ background: 'rgba(11,13,19,0.7)', borderColor: 'rgba(255,200,133,0.2)' }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-mono text-[0.65rem] text-[var(--warm)] font-bold">
+                        VERIFIED CREDENTIAL
+                      </span>
+                      <span className="font-mono text-[0.65rem] text-[var(--text-muted)]">
+                        {c.date}
+                      </span>
+                    </div>
+
+                    <h4 className="font-display font-bold text-base text-[var(--text-main)] mb-1">
+                      {c.name}
+                    </h4>
+
+                    <div className="text-xs text-[var(--text-secondary)] font-mono">
+                      Issuer: <span className="text-white font-medium">{c.issuer}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Specialization note */}
+              <div
+                className="p-5 rounded-xl border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)]"
+              >
+                <div className="flex items-center gap-2 font-mono text-xs text-[var(--cyan)] mb-2 font-bold">
+                  <Sparkles size={13} /> Continuous Technical Specialization
+                </div>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  Combining formal computer science coursework in algorithms, operating systems, and computer vision with practical edge AI experiments and real-world system deployments.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════
+            PART 2: WORK EXPERIENCE & TECHNICAL LEADERSHIP
+        ══════════════════════════════════════════════════ */}
+        <div>
+          <div className="flex items-center gap-2 font-mono text-xs text-[var(--cyan)] uppercase tracking-wider mb-6 pb-2 border-b border-[var(--border-subtle)]">
+            <Briefcase size={14} />
+            <span>Work Experience & Technical Leadership</span>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left: Interactive Timeline Selector (5 cols) */}
@@ -171,102 +276,6 @@ export default function ExperienceSection() {
                   </div>
                 </div>
 
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* ── ACADEMIC BACKGROUND & CERTIFICATIONS ── */}
-        <div>
-          <div className="flex items-center gap-2 font-mono text-xs text-[var(--emerald)] uppercase tracking-wider mb-6 pb-2 border-b border-[var(--border-subtle)]">
-            <GraduationCap size={15} />
-            <span>Academic Background & Verified Certifications</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            {/* Degrees (7 cols) */}
-            <div className="lg:col-span-7 space-y-6">
-              {educationHistory.map((edu) => (
-                <div
-                  key={edu.id}
-                  className="card p-6 sm:p-7 relative overflow-hidden"
-                  style={{ background: 'rgba(11,13,19,0.7)', borderColor: 'rgba(16,240,128,0.25)' }}
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <span className="font-mono text-xs text-[var(--emerald)] font-bold">
-                      {edu.period}
-                    </span>
-                    <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[rgba(16,240,128,0.1)] text-[var(--emerald)] border border-[rgba(16,240,128,0.3)]">
-                      GPA: {edu.gpa}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display font-bold text-xl text-[var(--text-main)] mb-1.5">
-                    {edu.degree}
-                  </h3>
-
-                  <div className="text-sm font-medium text-[var(--text-secondary)] mb-4 flex items-center gap-1.5">
-                    <Building2 size={14} className="text-[var(--emerald)]" />
-                    <span>{edu.institution}</span>
-                  </div>
-
-                  <ul className="space-y-2 pt-3 border-t border-[var(--border-subtle)]">
-                    {edu.highlights.map((h, i) => (
-                      <li key={i} className="text-xs text-[var(--text-secondary)] leading-relaxed flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] shrink-0 mt-1.5" />
-                        <span>{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            {/* Certifications (5 cols) */}
-            <div className="lg:col-span-5 space-y-5">
-              <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--warm)] flex items-center gap-2">
-                <Award size={14} /> Verified Certifications
-              </h4>
-
-              <div className="space-y-3">
-                {certifications.map((c, i) => (
-                  <div
-                    key={i}
-                    className="card p-5"
-                    style={{ background: 'rgba(11,13,19,0.7)', borderColor: 'rgba(255,200,133,0.2)' }}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-mono text-[0.65rem] text-[var(--warm)] font-bold">
-                        VERIFIED CREDENTIAL
-                      </span>
-                      <span className="font-mono text-[0.65rem] text-[var(--text-muted)]">
-                        {c.date}
-                      </span>
-                    </div>
-
-                    <h4 className="font-display font-bold text-base text-[var(--text-main)] mb-1">
-                      {c.name}
-                    </h4>
-
-                    <div className="text-xs text-[var(--text-secondary)] font-mono">
-                      Issuer: <span className="text-white font-medium">{c.issuer}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Research note */}
-              <div
-                className="p-5 rounded-xl border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)]"
-              >
-                <div className="flex items-center gap-2 font-mono text-xs text-[var(--cyan)] mb-2 font-bold">
-                  <Sparkles size={13} /> Continuous Technical Specialization
-                </div>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  Combining formal computer science coursework in algorithms, operating systems, and computer vision with practical edge AI experiments and real-world system deployments.
-                </p>
               </div>
             </div>
 

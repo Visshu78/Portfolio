@@ -123,12 +123,12 @@ function TypeWriter({ phrases, className }) {
 }
 
 const flowNodes = [
-  { id: 'experience', label: 'EXPERIENCE', sub: 'Roles & Education',    num: '01', color: '#38bdf8' },
-  { id: 'see',        label: 'SEE',        sub: 'Computer Vision',      num: '02', color: '#00f0ff' },
-  { id: 'build',      label: 'BUILD',      sub: 'AI Systems',           num: '03', color: '#10f080' },
-  { id: 'lab',        label: 'LAB',        sub: 'Living Lab',           num: '04', color: '#ff7adf' },
-  { id: 'write',      label: 'WRITE',      sub: 'Essays & Reflections', num: '05', color: '#ffc885' },
-  { id: 'about',      label: 'ABOUT',      sub: 'System & Contact',     num: '06', color: '#a78bfa' },
+  { id: 'experience', label: 'EDUCATION & EXP', sub: 'Degrees & Field Work', num: '01', color: '#10f080' },
+  { id: 'see',        label: 'SEE',             sub: 'Computer Vision',      num: '02', color: '#00f0ff' },
+  { id: 'build',      label: 'BUILD',           sub: 'AI Systems',           num: '03', color: '#38bdf8' },
+  { id: 'lab',        label: 'LAB',             sub: 'Living Lab',           num: '04', color: '#ff7adf' },
+  { id: 'write',      label: 'WRITE',           sub: 'Essays & Reflections', num: '05', color: '#ffc885' },
+  { id: 'about',      label: 'ABOUT',           sub: 'System & Contact',     num: '06', color: '#a78bfa' },
 ];
 
 export default function Hero({ onNavigate }) {
