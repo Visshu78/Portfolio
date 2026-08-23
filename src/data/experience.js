@@ -20,6 +20,22 @@ export const workExperience = [
     tech: ["Python", "Asyncio", "Sentence Transformers", "FAISS", "Zero-Shot NLP", "Streamlit", "SQLite", "REST APIs"]
   },
   {
+    id: "jark-technologies-intern",
+    role: "AI / ML Intern",
+    organization: "JARK Technologies",
+    location: "Remote / Hybrid",
+    period: "2025",
+    type: "Internship",
+    badge: "APPLIED AI & COMPUTER VISION",
+    badgeColor: "var(--emerald)",
+    highlights: [
+      "Designed and deployed applied machine learning pipelines, deep learning models, and automated data processing workflows.",
+      "Engineered computer vision and NLP model inference pipelines using PyTorch, OpenCV, and Scikit-Learn for production use cases.",
+      "Built low-latency backend APIs and service integrations to serve neural model predictions to client-facing applications."
+    ],
+    tech: ["Python", "PyTorch", "OpenCV", "Machine Learning", "FastAPI", "Data Pipelines", "Model Optimization"]
+  },
+  {
     id: "betalabs-sublead",
     role: "Sublead — Android Development Team",
     organization: "Beta Labs (Official Technical Club of IIIT Kottayam)",
@@ -27,7 +43,7 @@ export const workExperience = [
     period: "2024 — 2025",
     type: "Technical Leadership",
     badge: "CAMPUS TECH LEADERSHIP",
-    badgeColor: "var(--emerald)",
+    badgeColor: "var(--warm)",
     highlights: [
       "Mentored junior developers in modern application architecture, reactive UI development, and API integrations.",
       "Conducted technical workshops and hackathon mentorship sessions, fostering hands-on mobile systems development across campus.",
@@ -36,36 +52,20 @@ export const workExperience = [
     tech: ["Android", "Kotlin/Java", "Mobile Architecture", "Git/GitHub", "API Integration"]
   },
   {
-    id: "mindquest-mentor",
-    role: "Mentor & Operations Lead",
-    organization: "MindQuest Club — IIIT Kottayam",
+    id: "mindquest-apoorv-lead",
+    role: "Mentor & Festival Operations Lead",
+    organization: "MindQuest Club & Art Club (Apoorv Fest) — IIIT Kottayam",
     location: "IIIT Kottayam",
-    period: "Sept 2025 — Aug 2026",
-    type: "Leadership & Operations",
-    badge: "ORGANIZATION & SCALE",
+    period: "2023 — 2026",
+    type: "Leadership & Creative Operations",
+    badge: "ORGANIZATION & CREATIVE IMPACT",
     badgeColor: "var(--amber)",
     highlights: [
       "Led and mentored a 35–40 member volunteer team across 6 major institutional initiatives, overseeing operations and execution.",
-      "Conducted 50+ individual volunteer interviews, structuring dedicated teams across registration, finance, and crowd logistics.",
-      "Coordinated campus-wide events engaging 1,500+ participants, collaborating closely with administration and faculty."
+      "Conducted 50+ individual volunteer interviews, structuring dedicated teams across registration, finance, and crowd logistics for 1,500+ attendees.",
+      "Volunteered as core creative lead in Apoorv (flagship college fest) and Art Club, designing stage art, spatial backdrops, and festival logistics."
     ],
-    tech: ["Team Leadership", "Operations", "Event Logistics", "Crisis Management", "Public Relations"]
-  },
-  {
-    id: "apoorv-art-club",
-    role: "Core Volunteer & Creative Lead",
-    organization: "Art Club & Apoorv Fest — IIIT Kottayam",
-    location: "IIIT Kottayam",
-    period: "2023 — 2025",
-    type: "Creative & Campus Impact",
-    badge: "CREATIVE & FESTIVAL OPS",
-    badgeColor: "var(--warm)",
-    highlights: [
-      "Volunteered in Apoorv, the annual flagship cultural and technical fest of IIIT Kottayam, managing stage art and event flow.",
-      "Spearheaded creative installations, large-scale stage backdrops, and visual design themes as an active member of the college Art Club.",
-      "Coordinated cross-functional volunteer teams under tight festival deadlines to deliver high-attendance campus experiences."
-    ],
-    tech: ["Visual Storytelling", "Spatial Design", "Event Production", "Creative Direction"]
+    tech: ["Team Leadership", "Operations", "Event Logistics", "Creative Direction", "Public Relations"]
   }
 ];
 

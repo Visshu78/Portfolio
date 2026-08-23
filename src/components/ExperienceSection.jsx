@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { workExperience, educationHistory, certifications } from '../data/experience';
-import { Briefcase, GraduationCap, Award, Calendar, MapPin, ChevronRight, CheckCircle2, Sparkles, Building2, BookOpen } from 'lucide-react';
+import { Briefcase, GraduationCap, Award, Calendar, MapPin, ChevronRight, CheckCircle2, Sparkles, Building2 } from 'lucide-react';
 
 export default function ExperienceSection() {
   const [selectedExpId, setSelectedExpId] = useState(workExperience[0].id);
@@ -28,22 +28,15 @@ export default function ExperienceSection() {
             style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1 }}
           >
             Field Experience,<br />
-            <span style={{ color: 'var(--cyan)' }}>Leadership & Education</span>
+            <span style={{ color: 'var(--cyan)' }}>Engineering & Education</span>
           </h2>
           <p className="text-[var(--text-secondary)] max-w-2xl text-base leading-relaxed reveal" data-delay="100">
-            Real-world machine learning deployments with law enforcement, technical leadership in campus developer clubs, and rigorous academic foundations in Computer Science.
+            Applying machine learning and computer vision pipelines in production, leading technical campus initiatives, and building strong theoretical foundations in Computer Science.
           </p>
         </div>
 
-        {/* ══════════════════════════════════════════════════
-            PART 1: WORK EXPERIENCE & LEADERSHIP
-        ══════════════════════════════════════════════════ */}
+        {/* ── WORK EXPERIENCE INTERACTIVE EXPLORER ── */}
         <div className="mb-20">
-          <div className="flex items-center gap-2 font-mono text-xs text-[var(--cyan)] uppercase tracking-wider mb-6 pb-2 border-b border-[var(--border-subtle)]">
-            <Briefcase size={14} />
-            <span>Work Experience & Campus Leadership</span>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left: Interactive Timeline Selector (5 cols) */}
@@ -70,7 +63,7 @@ export default function ExperienceSection() {
                     )}
 
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-mono text-[0.62rem] px-2 py-0.5 rounded" style={{ color: exp.badgeColor, background: `${exp.badgeColor}15`, border: `1px solid ${exp.badgeColor}30` }}>
+                      <span className="font-mono text-[0.62rem] px-2 py-0.5 rounded font-semibold" style={{ color: exp.badgeColor, background: `${exp.badgeColor}15`, border: `1px solid ${exp.badgeColor}30` }}>
                         {exp.badge}
                       </span>
                       <span className="font-mono text-[0.65rem] text-[var(--text-muted)] flex items-center gap-1">
@@ -184,13 +177,11 @@ export default function ExperienceSection() {
           </div>
         </div>
 
-        {/* ══════════════════════════════════════════════════
-            PART 2: ACADEMIC FOUNDATIONS & EDUCATION
-        ══════════════════════════════════════════════════ */}
+        {/* ── ACADEMIC BACKGROUND & CERTIFICATIONS ── */}
         <div>
           <div className="flex items-center gap-2 font-mono text-xs text-[var(--emerald)] uppercase tracking-wider mb-6 pb-2 border-b border-[var(--border-subtle)]">
             <GraduationCap size={15} />
-            <span>Academic Background, Degrees & Certifications</span>
+            <span>Academic Background & Verified Certifications</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -233,7 +224,7 @@ export default function ExperienceSection() {
               ))}
             </div>
 
-            {/* Certifications & Notes (5 cols) */}
+            {/* Certifications (5 cols) */}
             <div className="lg:col-span-5 space-y-5">
               <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--warm)] flex items-center gap-2">
                 <Award size={14} /> Verified Certifications
@@ -266,7 +257,7 @@ export default function ExperienceSection() {
                 ))}
               </div>
 
-              {/* Research commitment card */}
+              {/* Research note */}
               <div
                 className="p-5 rounded-xl border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)]"
               >
