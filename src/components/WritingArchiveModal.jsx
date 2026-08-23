@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { technicalNotes, poetryWritings } from '../data/writings';
+import { technicalNotes, paperDeconstructions, poetryWritings } from '../data/writings';
 import { 
   X, BookOpen, Feather, Code2, Clock, Search, 
-  ArrowLeft, ExternalLink, Sparkles, SlidersHorizontal, Share2, Check
+  ArrowLeft, ExternalLink, Sparkles, SlidersHorizontal, Share2, Check, Download, FileText
 } from 'lucide-react';
+import { GithubIcon } from './Icons';
 
 export default function WritingArchiveModal({ isOpen, onClose }) {
-  const [activeCategory, setActiveCategory] = useState('all'); // all | technical | poetry | papers
+  const [activeCategory, setActiveCategory] = useState('all'); // all | technical | papers | poetry
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [copied, setCopied] = useState(false);
@@ -37,17 +38,18 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
   // Combine items
   const allItems = [
     ...technicalNotes.map(n => ({ ...n, typeTag: 'technical', typeLabel: 'Technical Essay', color: 'var(--cyan)' })),
+    ...paperDeconstructions.map(p => ({ ...p, typeTag: 'papers', typeLabel: 'Paper Deconstruction', color: 'var(--emerald)' })),
     ...poetryWritings.map(p => ({ ...p, typeTag: 'poetry', typeLabel: 'Poetry & Reflection', color: 'var(--warm)', summary: p.body.slice(0, 140) + '...' })),
     {
-      id: 'paper-breakdowns',
-      title: 'Deconstructing AI & CV Research Papers with Simple Intuitions',
-      category: 'Research Paper Explanations · Code_happy',
-      date: 'Ongoing Archive',
-      readTime: 'Multi-part series',
+      id: 'paper-repo-link',
+      title: 'Open Source Research Papers Breakdown Archive',
+      category: 'GitHub Repository · Visshu78/Research_Papers',
+      date: 'Active Archive',
+      readTime: 'Multi-paper Repo',
       typeTag: 'papers',
-      typeLabel: 'Paper Deconstruction',
+      typeLabel: 'GitHub Repo',
       color: 'var(--emerald)',
-      summary: 'Breaking down foundational Computer Vision and Deep Learning research papers into clear mental models, visual analogies, and practical code implementations.',
+      summary: 'Explore full written breakdowns, mental models, and architectural insights for Transformer architectures, BERT, and Computer Vision foundations.',
       isExternal: true,
       externalUrl: 'https://github.com/Visshu78/Research_Papers',
       body: `Research papers are often dense with notation, but the core intuitions behind breakthroughs (e.g. Residual connections, Spatial Attention, ViT Patch Tokenization, Contrastive Learning) are fundamentally simple and elegant.\n\n### The Philosophy\nIf you truly understand an architectural mechanism, you should be able to explain it using a basic physical analogy without hiding behind equations.\n\n### Explore the Archive\nExplore the open repository containing written breakdowns, visual diagrams, and intuitive mental models for core AI and Vision papers on GitHub.`
@@ -135,13 +137,19 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
           <article className="max-w-3xl mx-auto px-6 py-12 lg:py-16">
             <div className="mb-8">
               <div className="flex flex-wrap items-center gap-3 font-mono text-xs mb-3" style={{ color: selectedPiece.color }}>
-                <span>{selectedPiece.typeLabel.toUpperCase()}</span>
+                <span className="font-bold">{selectedPiece.typeLabel.toUpperCase()}</span>
                 <span className="text-[var(--text-muted)]">•</span>
                 <span>{selectedPiece.date}</span>
                 {selectedPiece.readTime && (
                   <>
                     <span className="text-[var(--text-muted)]">•</span>
                     <span className="flex items-center gap-1"><Clock size={11} /> {selectedPiece.readTime}</span>
+                  </>
+                )}
+                {selectedPiece.originalPaper && (
+                  <>
+                    <span className="text-[var(--text-muted)]">•</span>
+                    <span className="text-[var(--text-secondary)]">{selectedPiece.originalPaper}</span>
                   </>
                 )}
               </div>
@@ -151,9 +159,47 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
               </h1>
 
               {selectedPiece.summary && (
-                <p className="text-base text-[var(--text-secondary)] leading-relaxed border-l-2 border-[var(--cyan)] pl-4 py-1 italic mb-8">
+                <p className="text-base text-[var(--text-secondary)] leading-relaxed border-l-2 pl-4 py-1 italic mb-6" style={{ borderColor: selectedPiece.color }}>
                   {selectedPiece.summary}
                 </p>
+              )}
+
+              {/* Direct PDF and Citation Bar for Paper Deconstructions */}
+              {selectedPiece.pdfUrl && (
+                <div className="p-4 rounded-xl border border-[rgba(16,240,128,0.25)] bg-[rgba(16,240,128,0.04)] flex flex-wrap items-center justify-between gap-4 mb-8">
+                  <div>
+                    <div className="font-mono text-xs text-[var(--emerald)] font-bold mb-0.5">
+                      ORIGINAL DECONSTRUCTION PDF AVAILABLE
+                    </div>
+                    <div className="text-xs text-[var(--text-muted)] font-mono">
+                      Written & formatted with diagrams by Vishal Dhawal
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={selectedPiece.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="interactive font-mono text-xs px-3.5 py-1.5 rounded-lg bg-[var(--emerald)] text-black font-bold flex items-center gap-1.5 hover:opacity-90 transition-all"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Download size={13} />
+                      <span>Download / View PDF</span>
+                    </a>
+                    {selectedPiece.originalPaperUrl && (
+                      <a
+                        href={selectedPiece.originalPaperUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="interactive font-mono text-xs px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-white flex items-center gap-1 transition-colors"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <span>arXiv Source</span> <ExternalLink size={11} />
+                      </a>
+                    )}
+                  </div>
+                </div>
               )}
 
               <div className="w-full h-px bg-[var(--border-subtle)] my-8" />
@@ -169,9 +215,19 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
                 selectedPiece.body.split('\n\n').map((para, i) => {
                   if (para.startsWith('### ')) {
                     return (
-                      <h2 key={i} className="font-display font-bold text-2xl text-[var(--text-main)] pt-6 pb-2 not-italic">
+                      <h2 key={i} className="font-display font-bold text-2xl text-[var(--text-main)] pt-6 pb-2 not-italic" style={{ color: selectedPiece.color }}>
                         {para.replace('### ', '')}
                       </h2>
+                    );
+                  }
+                  if (para.startsWith('---')) {
+                    return <hr key={i} className="border-[var(--border-subtle)] my-6" />;
+                  }
+                  if (para.startsWith('1. ') || para.startsWith('2. ') || para.startsWith('3. ') || para.startsWith('4. ')) {
+                    return (
+                      <div key={i} className="p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] font-mono text-sm leading-relaxed not-italic">
+                        {para}
+                      </div>
                     );
                   }
                   return <p key={i}>{para}</p>;
@@ -220,24 +276,24 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
             {/* Header */}
             <div className="text-center max-w-2xl mx-auto mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--warm)] bg-[rgba(255,200,133,0.08)] border border-[rgba(255,200,133,0.2)]">
-                <Sparkles size={12} /> COMPLETE WRITING ARCHIVE
+                <Sparkles size={12} /> COMPLETE WRITING & RESEARCH ARCHIVE
               </div>
               <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-[var(--text-main)] mb-3">
-                The Notebook & Essays
+                The Notebook, Papers & Essays
               </h1>
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed font-serif italic text-base">
-                Technical thoughts on Computer Vision and AI systems, philosophical notes on perception, and poems written in quiet evenings.
+                Technical thoughts on Computer Vision and AI systems, intuitive analogies for landmark research papers, and poems written in quiet evenings.
               </p>
             </div>
 
-            {/* Controls: Search + Filter Tabs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--border-subtle)]">
-              {/* Search Bar */}
-              <div className="relative flex-1 max-w-md">
-                <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+            {/* Search & Category Filter Bar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+              {/* Search input */}
+              <div className="relative w-full sm:w-80">
+                <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Search articles, poems, topics..."
+                  placeholder="Search articles, papers, poems..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="w-full bg-[rgba(255,255,255,0.03)] border border-[var(--border-subtle)] rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--cyan)] transition-colors font-mono"
@@ -257,8 +313,8 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
                 {[
                   { id: 'all', label: 'All Works' },
                   { id: 'technical', label: 'Technical Essays' },
-                  { id: 'poetry', label: 'Poetry' },
                   { id: 'papers', label: 'Paper Deconstructions' },
+                  { id: 'poetry', label: 'Poetry' },
                 ].map(cat => (
                   <button
                     key={cat.id}
@@ -276,7 +332,7 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            {/* Grid of articles & poems */}
+            {/* Grid of articles, papers & poems */}
             {filtered.length === 0 ? (
               <div className="text-center py-16 text-[var(--text-muted)] font-mono text-sm">
                 No writings matched "{searchQuery}". Try a different keyword.
@@ -315,11 +371,11 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
 
                     <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-[0.68rem] font-mono text-[var(--text-muted)]">
                       <span className="flex items-center gap-1">
-                        {item.typeTag === 'poetry' ? <Feather size={12} /> : <Code2 size={12} />}
+                        {item.typeTag === 'poetry' ? <Feather size={12} /> : item.typeTag === 'papers' ? <FileText size={12} /> : <Code2 size={12} />}
                         {item.readTime || 'Poem'}
                       </span>
-                      <span className="text-[var(--cyan)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                        {item.isExternal ? 'View on GitHub ↗' : 'Read Piece →'}
+                      <span className="text-[var(--cyan)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 font-semibold">
+                        {item.isExternal ? 'View on GitHub ↗' : 'Read Breakdown →'}
                       </span>
                     </div>
                   </div>

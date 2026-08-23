@@ -1,6 +1,6 @@
 /**
- * Vishal Dhawal — The Human Layer: Technical writing & Personal poetry.
- * Essays, reflections, and observations.
+ * Vishal Dhawal — The Human Layer: Technical writing, Paper Deconstructions & Personal poetry.
+ * Essays, research paper breakdowns with visual analogies, reflections, and observations.
  */
 
 export const technicalNotes = [
@@ -64,6 +64,90 @@ Switching to GroupKFold by project/survey/GCP ID dropped the validation scores a
 A model is a component. A system is what you actually deploy. The gap between them — camera physics, deployment constraints, data quality, evaluation integrity, latency budgets — is where most real engineering work actually lives.
 
 High validation accuracy is necessary but not sufficient. Build the system first; the model is one part of it.`
+  }
+];
+
+export const paperDeconstructions = [
+  {
+    id: "paper-01",
+    title: "Attention Is All You Need — Explained with Analogies",
+    originalPaper: "Vaswani et al., NeurIPS 2017",
+    category: "Foundational Architecture · Analogy Breakdown",
+    date: "2024",
+    readTime: "8 min read",
+    pdfUrl: "/research_papers/ATTENTION_IS_ALL_YOU_NEED_explained.pdf",
+    originalPaperUrl: "https://arxiv.org/abs/1706.03762",
+    repoUrl: "https://github.com/Visshu78/Research_Papers",
+    summary: "Breaking down the Transformer breakthrough into a beginner-friendly classroom analogy: Professor Transformer, group inquiry over rigid sequential turns, Queries/Keys/Values, and multi-head thinking caps.",
+    body: `### The Classroom Analogy: Escaping Sequential Bottlenecks
+
+**Traditional Teaching (RNNs & CNNs):**
+Imagine a classroom where the teacher is translating English to German:
+- The old-school teacher (like an RNN) is strict: they go one student at a time, front bench to back bench.
+- If someone didn't understand a word, they couldn't ask others directly—they had to depend on the teacher remembering and passing notes back.
+- If you have a sentence like *"The girl who lived in Paris loved croissants"*, "girl" and "loved" are related but far apart! The RNN lost the signal along the way.
+
+**Enter Professor Transformer:**
+Professor Transformer believes in group learning. Instead of waiting student-by-student, everyone in class listens and talks to each other simultaneously. If a student hears a confusing word, they can immediately look at or *attend to* any classmate across the room who holds the context.
+
+---
+
+### Key Architectural Mechanisms
+
+1. **Scaled Dot-Product Attention ($Q, K, V$)**:
+   - **Query ($Q$)**: The question a student is asking.
+   - **Key ($K$)**: The label/badge of what knowledge each classmate holds.
+   - **Value ($V$)**: The actual content of the answer.
+   - You take the dot product $\\frac{Q K^T}{\\sqrt{d_k}}$, apply softmax, and compute a weighted average of all values.
+
+2. **Multi-Head Attention (8 Thinking Caps)**:
+   - Instead of listening with one mindset, each token wears 8 different "thinking caps" simultaneously: one for grammar, one for subject-verb agreement, one for semantic tone, etc.
+
+3. **Positional Encodings (Knowing the Order)**:
+   - Because all students talk in parallel, words lose natural sequential order. Sine and cosine wave frequencies are added to token embeddings to give each word an innate sense of position without needing step-by-step recurrence.
+
+4. **WMT Benchmark Results**:
+   - Outperformed ensemble methods on English-to-German (**28.4 BLEU**) and English-to-French (**41.0 BLEU**) while requiring only a fraction of previous training compute.`
+  },
+  {
+    id: "paper-02",
+    title: "BERT and the Chamber of Language Secrets",
+    originalPaper: "Devlin et al., NAACL 2019",
+    category: "Bidirectional Pre-training · Wizarding World Analogy",
+    date: "2024",
+    readTime: "7 min read",
+    pdfUrl: "/research_papers/BERT_explained.pdf",
+    originalPaperUrl: "https://aclanthology.org/N19-1423/",
+    repoUrl: "https://github.com/Visshu78/Research_Papers",
+    summary: "A Harry Potter themed deconstruction of BERT: overcoming directional blindness, Masked Language Modeling (15% blanked runes), Next Sentence Prediction, and swappable fine-tuning wand tips.",
+    body: `### The Wizarding World of Language Models
+
+**The Problem with Old Magic (Pre-BERT Era):**
+Wizards like ELMo and OpenAI GPT could only read spell scrolls one way:
+- **ELMo**: Like a two-headed owl—one head read left-to-right, the other right-to-left, but the heads never talked to each other mid-flight!
+- **GPT**: Stubbornly read left-to-right only. In a spell like *"The [MASK] flew over Hogwarts"*, GPT guessed *"owl"* because it couldn't peek ahead to see *"dragon"* revealed later in the scroll!
+
+**BERT: The Dual-Wand Breakthrough:**
+BERT entered the Room of Requirement with true **bidirectional self-attention**—reading words from all directions simultaneously like a time-turner for text.
+
+---
+
+### How BERT Was Forged (Pre-training Rituals)
+
+1. **Masked Language Modeling (MLM — Blank-Rune Divination)**:
+   - 15% of words are blanked out: 80% replaced with \`[MASK]\`, 10% swapped with random tokens, and 10% kept unchanged.
+   - The model must reconstruct the erased word using full bidirectional context from both left and right.
+
+2. **Next Sentence Prediction (NSP — Scroll Linking)**:
+   - Evaluates whether Sentence B genuinely follows Sentence A (*"Expecto Patronum"* $\\to$ *"A silver stag appears"* = ✅ vs mismatch = ❌).
+   - The special \`[CLS]\` token absorbs the whole-scroll representation.
+
+3. **One Wand, All Magic (Universal Fine-Tuning)**:
+   - Instead of inventing new architectures from scratch for every task:
+     - For Classification? Add a Sorting Hat pin to \`[CLS]\`.
+     - For Question Answering (SQuAD)? Add a span-highlighter to output tokens.
+     - For Named Entity Recognition (NER)? Add a dark-artifact tagger.
+   - Result: 11 NLP state-of-the-art records shattered with just a few epochs of fine-tuning.`
   }
 ];
 
