@@ -27,8 +27,7 @@ export const profileData = {
       category: "Computer Vision & Edge",
       skills: [
         "OpenCV", "Image Processing", "Object Detection", "Image Classification",
-        "Keypoint Detection", "Face Recognition", "Gesture Recognition",
-        "High-Resolution Vision", "Industrial Vision", "Real-Time Vision",
+        "Face Recognition", "Gesture Recognition", "High-Resolution Vision", "Real-Time Vision",
         "Edge AI", "Jetson", "ONNX", "CUDA"
       ]
     },
@@ -43,7 +42,7 @@ export const profileData = {
     {
       category: "Systems & Infrastructure",
       skills: [
-        "Python", "Node.js", "Express", "Socket.IO", "WebRTC",
+        "Python", "FastAPI", "Node.js", "Socket.IO", "WebRTC",
         "REST APIs", "SQLite", "Docker", "Linux", "Streamlit", "Git/GitHub"
       ]
     },
@@ -51,8 +50,7 @@ export const profileData = {
       category: "Research & Methods",
       skills: [
         "Experimental Design", "Model Evaluation", "GroupKFold", "Data Leakage Prevention",
-        "Tiled Inference", "Quantization", "Retrieval Evaluation", "Error Analysis",
-        "Technical Writing", "Poetry", "Visual Storytelling"
+        "Tiled Inference", "Quantization", "Retrieval Evaluation", "Error Analysis"
       ]
     }
   ],
