@@ -464,7 +464,7 @@ export default function AboutSection() {
                   <MediumIcon size={16} className="text-[var(--warm)] shrink-0" />
                   <div className="min-w-0">
                     <div className="font-mono text-[0.58rem] text-[var(--text-muted)] uppercase">Medium</div>
-                    <div className="font-mono text-xs text-white group-hover:text-[var(--warm)] truncate font-semibold">@vishaldhawal</div>
+                    <div className="font-mono text-xs text-white group-hover:text-[var(--warm)] truncate font-semibold">@visshu78</div>
                   </div>
                 </a>
 
@@ -479,7 +479,7 @@ export default function AboutSection() {
                   <InstagramIcon size={16} className="text-[#f43f5e] shrink-0" />
                   <div className="min-w-0">
                     <div className="font-mono text-[0.58rem] text-[var(--text-muted)] uppercase">Instagram</div>
-                    <div className="font-mono text-xs text-white group-hover:text-[#f43f5e] truncate font-semibold">@vishaldhawal</div>
+                    <div className="font-mono text-xs text-white group-hover:text-[#f43f5e] truncate font-semibold">@visshu_7880</div>
                   </div>
                 </a>
 
