@@ -52,20 +52,20 @@ export const workExperience = [
     tech: ["Android", "Kotlin/Java", "Mobile Architecture", "Git/GitHub", "API Integration"]
   },
   {
-    id: "mindquest-apoorv-lead",
-    role: "Mentor & Festival Operations Lead",
-    organization: "MindQuest Club & Art Club (Apoorv Fest) — IIIT Kottayam",
+    id: "mindquest-mentor",
+    role: "Mentor & Operations Lead",
+    organization: "MindQuest Mental Wellness Club — IIIT Kottayam",
     location: "IIIT Kottayam",
-    period: "2023 — 2026",
-    type: "Leadership & Creative Operations",
-    badge: "ORGANIZATION & CREATIVE IMPACT",
+    period: "Sept 2025 — Aug 2026",
+    type: "Leadership & Operations",
+    badge: "MENTORSHIP & SCALE",
     badgeColor: "var(--amber)",
     highlights: [
-      "Led and mentored a 35–40 member volunteer team across 6 major institutional initiatives, overseeing operations and execution.",
-      "Conducted 50+ individual volunteer interviews, structuring dedicated teams across registration, finance, and crowd logistics for 1,500+ attendees.",
-      "Volunteered as core creative lead in Apoorv (flagship college fest) and Art Club, designing stage art, spatial backdrops, and festival logistics."
+      "Led a 35–40 member volunteer team across 6 institutional events, coordinating operations, task execution, and event activities.",
+      "Conducted 50+ individual volunteer interviews and guided teams on crowd management, registration, finance, and event execution.",
+      "Coordinated events with 1,500+ participants, collaborating closely with faculty and volunteers to ensure seamless operations and participant experience."
     ],
-    tech: ["Team Leadership", "Operations", "Event Logistics", "Creative Direction", "Public Relations"]
+    tech: ["Team Leadership", "Volunteer Management", "Event Operations", "Interviewing", "Public Coordination"]
   }
 ];
 
