@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { profileData } from '../data/profile';
 import { workExperience, educationHistory } from '../data/experience';
 import { cvProjects, systemProjects } from '../data/projects';
-import { Terminal, Mail, Send, Check, Copy, User, Sparkles, CornerDownLeft } from 'lucide-react';
-import { GithubIcon } from './Icons';
+import { Terminal, Mail, Send, Check, Copy, User, Sparkles, CornerDownLeft, ExternalLink } from 'lucide-react';
+import { GithubIcon, LinkedinIcon, MediumIcon, InstagramIcon } from './Icons';
 
 const COMMANDS = {
   help: () => [
@@ -13,9 +13,11 @@ const COMMANDS = {
     '  projects    - Flagship Computer Vision & AI systems',
     '  experience  - Work history & internships',
     '  education   - Academic degrees & universities',
-    '  contact     - Direct contact information',
+    '  contact     - All direct contact and social channels',
     '  github      - Open GitHub profile in new tab',
     '  linkedin    - Open LinkedIn profile in new tab',
+    '  medium      - Open Medium technical blog in new tab',
+    '  instagram   - Open Instagram profile in new tab',
     '  sysinfo     - Vision pipeline & telemetry status',
     '  clear       - Clear terminal screen',
   ].join('\n'),
@@ -49,9 +51,11 @@ const COMMANDS = {
   ].join('\n'),
 
   contact: () => [
-    `Email:    ${profileData.email}`,
-    `LinkedIn: ${profileData.linkedin}`,
-    `GitHub:   ${profileData.github}`,
+    `Email:     ${profileData.email}`,
+    `GitHub:    ${profileData.github}`,
+    `LinkedIn:  ${profileData.linkedin}`,
+    `Medium:    ${profileData.medium}`,
+    `Instagram: ${profileData.instagram}`,
   ].join('\n'),
 
   github: () => {
@@ -62,6 +66,16 @@ const COMMANDS = {
   linkedin: () => {
     window.open(profileData.linkedin, '_blank');
     return `→ Opened LinkedIn: ${profileData.linkedin}`;
+  },
+
+  medium: () => {
+    window.open(profileData.medium, '_blank');
+    return `→ Opened Medium: ${profileData.medium}`;
+  },
+
+  instagram: () => {
+    window.open(profileData.instagram, '_blank');
+    return `→ Opened Instagram: ${profileData.instagram}`;
   },
 
   sysinfo: () => [
@@ -78,7 +92,7 @@ const COMMANDS = {
   'cat notebook.txt': () => `[CURRENTLY]\n${profileData.notebook.currently}\n\n[USUALLY FOUND]\n${profileData.notebook.usuallyFound}`,
 };
 
-const SUGGESTIONS = ['help', 'whoami', 'skills', 'projects', 'experience', 'contact', 'clear'];
+const SUGGESTIONS = ['help', 'whoami', 'skills', 'projects', 'experience', 'medium', 'contact', 'clear'];
 
 export default function AboutSection() {
   const [history, setHistory] = useState([
@@ -321,7 +335,7 @@ export default function AboutSection() {
               <div
                 ref={terminalBodyRef}
                 className="p-4 font-mono text-xs space-y-2 overflow-y-auto"
-                style={{ minHeight: 220, maxHeight: 290 }}
+                style={{ minHeight: 220, maxHeight: 270 }}
               >
                 {history.map((item, idx) => (
                   <div key={idx} className="leading-relaxed">
@@ -384,7 +398,7 @@ export default function AboutSection() {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="type a command (e.g. whoami, skills, projects)..."
+                  placeholder="type a command (e.g. whoami, skills, medium)..."
                   className="interactive w-full bg-transparent border-0 font-mono text-xs text-white focus:outline-none placeholder:text-[var(--text-muted)] placeholder:text-[0.7rem]"
                   style={{ caretColor: 'var(--cyan)' }}
                   autoComplete="off"
@@ -399,52 +413,87 @@ export default function AboutSection() {
               </form>
             </div>
 
-            {/* Contact card */}
+            {/* Social Channels & Contact Card */}
             <div className="card p-6 reveal" data-delay="80">
               <h3 className="font-display font-bold text-xl text-[var(--text-main)] mb-1">Initiate Contact</h3>
-              <p className="text-[0.8rem] text-[var(--text-secondary)] mb-5">
+              <p className="text-[0.8rem] text-[var(--text-secondary)] mb-4">
                 Open to CV/AI collaborations, research conversations, and engineering roles.
               </p>
 
-              {/* GitHub */}
-              <div
-                className="flex items-center justify-between p-3 rounded-lg mb-3"
-                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}
-              >
-                <div className="flex items-center gap-3">
-                  <GithubIcon size={18} style={{ color: 'var(--cyan)' }} />
-                  <div>
-                    <div className="label mb-0">GITHUB</div>
-                    <a
-                      href={profileData.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="interactive font-mono text-xs font-semibold text-white hover:text-[var(--cyan)] transition-colors"
-                    >
-                      github.com/Visshu78
-                    </a>
-                  </div>
-                </div>
+              {/* Compact 4-Grid Social Hub */}
+              <div className="grid grid-cols-2 gap-2.5 mb-4">
+                
+                {/* GitHub */}
                 <a
                   href={profileData.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn text-xs py-1.5 px-3"
+                  className="interactive p-2.5 rounded-lg border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(0,240,255,0.4)] hover:bg-[rgba(0,240,255,0.04)] transition-all flex items-center gap-2.5 group"
                   style={{ textDecoration: 'none' }}
                 >
-                  View
+                  <GithubIcon size={16} className="text-[var(--cyan)] shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-mono text-[0.58rem] text-[var(--text-muted)] uppercase">GitHub</div>
+                    <div className="font-mono text-xs text-white group-hover:text-[var(--cyan)] truncate font-semibold">@Visshu78</div>
+                  </div>
                 </a>
+
+                {/* LinkedIn */}
+                <a
+                  href={profileData.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="interactive p-2.5 rounded-lg border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(0,240,255,0.4)] hover:bg-[rgba(0,240,255,0.04)] transition-all flex items-center gap-2.5 group"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <LinkedinIcon size={16} className="text-[var(--cyan)] shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-mono text-[0.58rem] text-[var(--text-muted)] uppercase">LinkedIn</div>
+                    <div className="font-mono text-xs text-white group-hover:text-[var(--cyan)] truncate font-semibold">in/vishal-dhawal</div>
+                  </div>
+                </a>
+
+                {/* Medium */}
+                <a
+                  href={profileData.medium}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="interactive p-2.5 rounded-lg border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(255,200,133,0.4)] hover:bg-[rgba(255,200,133,0.04)] transition-all flex items-center gap-2.5 group"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <MediumIcon size={16} className="text-[var(--warm)] shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-mono text-[0.58rem] text-[var(--text-muted)] uppercase">Medium</div>
+                    <div className="font-mono text-xs text-white group-hover:text-[var(--warm)] truncate font-semibold">@vishaldhawal</div>
+                  </div>
+                </a>
+
+                {/* Instagram */}
+                <a
+                  href={profileData.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="interactive p-2.5 rounded-lg border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(244,63,94,0.4)] hover:bg-[rgba(244,63,94,0.04)] transition-all flex items-center gap-2.5 group"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <InstagramIcon size={16} className="text-[#f43f5e] shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-mono text-[0.58rem] text-[var(--text-muted)] uppercase">Instagram</div>
+                    <div className="font-mono text-xs text-white group-hover:text-[#f43f5e] truncate font-semibold">@vishaldhawal</div>
+                  </div>
+                </a>
+
               </div>
 
               {/* Email */}
               <div
-                className="flex items-center justify-between p-3 rounded-lg mb-5"
+                className="flex items-center justify-between p-3 rounded-lg mb-4"
                 style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}
               >
                 <div className="flex items-center gap-3">
-                  <Mail size={18} style={{ color: 'var(--emerald)' }} />
+                  <Mail size={16} style={{ color: 'var(--emerald)' }} />
                   <div>
-                    <div className="label mb-0">EMAIL</div>
+                    <div className="label mb-0">DIRECT EMAIL</div>
                     <span className="font-mono text-xs text-white">
                       {profileData.email}
                     </span>
@@ -463,7 +512,7 @@ export default function AboutSection() {
               <form onSubmit={submitContactForm} className="space-y-3 pt-4 border-t border-[var(--border-subtle)]">
                 <div className="font-mono text-[0.65rem] text-[var(--cyan)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] anim-pulse" />
-                  <span>Direct Encrypted Transmission</span>
+                  <span>Direct Transmission Line</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">

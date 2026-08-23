@@ -11,6 +11,8 @@ export const profileData = {
   frameId: "FRAME_001",
   github: "https://github.com/Visshu78",
   linkedin: "https://www.linkedin.com/in/vishal-dhawal-b69163327/",
+  medium: "https://medium.com/@vishaldhawal8853",
+  instagram: "https://instagram.com/vishaldhawal",
   email: "vishaldhawal8853@gmail.com",
 
   notebook: {
