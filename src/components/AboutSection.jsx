@@ -1,45 +1,158 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { profileData } from '../data/profile';
-import { Terminal, Mail, Send, Check, Copy, User } from 'lucide-react';
+import { workExperience, educationHistory } from '../data/experience';
+import { cvProjects, systemProjects } from '../data/projects';
+import { Terminal, Mail, Send, Check, Copy, User, Sparkles, CornerDownLeft } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
 const COMMANDS = {
-  help:     () => 'Commands: whoami · skills · focus · github · linkedin · contact · frame · clear',
-  whoami:   () => `${profileData.name} — ${profileData.role}.\n${profileData.tagline}`,
-  skills:   () => 'CV: PyTorch · OpenCV · EfficientNet · YOLOv8 · ONNX · Edge AI · Jetson\nAI: LLMs · RAG · FAISS · BM25 · Sentence Transformers · Hybrid Retrieval\nSystems: WebRTC · Node.js · Docker · Streamlit · Git',
-  focus:    () => `Currently: ${profileData.notebook.currently}`,
-  github:   () => { window.open(profileData.github, '_blank'); return `→ Opening ${profileData.github}`; },
-  linkedin: () => { window.open(profileData.linkedin, '_blank'); return `→ Opening ${profileData.linkedin}`; },
-  contact:  () => `Email: ${profileData.email}\nGitHub: ${profileData.github}\nLinkedIn: ${profileData.linkedin}`,
-  frame:    () => `System: ${profileData.telemetry.frameCounter} | Latency: ${profileData.telemetry.avgLatency} | Deployments: ${profileData.telemetry.visionPipelinesDeployed}`,
+  help: () => [
+    'Available commands:',
+    '  whoami      - Print identity, role, and focus',
+    '  skills      - Categorized technical competencies',
+    '  projects    - Flagship Computer Vision & AI systems',
+    '  experience  - Work history & internships',
+    '  education   - Academic degrees & universities',
+    '  contact     - Direct contact information',
+    '  github      - Open GitHub profile in new tab',
+    '  linkedin    - Open LinkedIn profile in new tab',
+    '  sysinfo     - Vision pipeline & telemetry status',
+    '  clear       - Clear terminal screen',
+  ].join('\n'),
+
+  whoami: () => `${profileData.name}\n${profileData.role}\nTagline: ${profileData.tagline}\nCurrently: ${profileData.notebook.currently}`,
+
+  skills: () => [
+    '=== COMPUTER VISION & EDGE ===',
+    '  PyTorch · OpenCV · EfficientNet · YOLO · Keypoints · CUDA · Jetson · ONNX',
+    '=== APPLIED AI & NLP ===',
+    '  LLMs · RAG · FAISS · BM25 · Sentence-Transformers · Hybrid Retrieval · OCR',
+    '=== SYSTEMS & ARCHITECTURE ===',
+    '  FastAPI · WebRTC · Node.js · Docker · Streamlit · Linux · Git',
+  ].join('\n'),
+
+  projects: () => [
+    '=== COMPUTER VISION ===',
+    ...cvProjects.map(p => `  • ${p.title} [${p.confidence}]`),
+    '=== APPLIED AI & SYSTEMS ===',
+    ...systemProjects.map(p => `  • ${p.title} (${p.category})`),
+  ].join('\n'),
+
+  experience: () => [
+    '=== WORK & INTERNSHIPS ===',
+    ...workExperience.map(e => `  [${e.period}] ${e.role} @ ${e.organization}`),
+  ].join('\n'),
+
+  education: () => [
+    '=== ACADEMIC FOUNDATIONS ===',
+    ...educationHistory.map(e => `  • ${e.degree} — ${e.institution} (GPA: ${e.gpa})`),
+  ].join('\n'),
+
+  contact: () => [
+    `Email:    ${profileData.email}`,
+    `LinkedIn: ${profileData.linkedin}`,
+    `GitHub:   ${profileData.github}`,
+  ].join('\n'),
+
+  github: () => {
+    window.open(profileData.github, '_blank');
+    return `→ Opened GitHub: ${profileData.github}`;
+  },
+
+  linkedin: () => {
+    window.open(profileData.linkedin, '_blank');
+    return `→ Opened LinkedIn: ${profileData.linkedin}`;
+  },
+
+  sysinfo: () => [
+    `FRAME_ID:       ${profileData.frameId}`,
+    `TELEMETRY:      ${profileData.telemetry.frameCounter}`,
+    `AVG_LATENCY:    ${profileData.telemetry.avgLatency}`,
+    `DETECTION_RATE: ${profileData.telemetry.detectionRate}`,
+    `PIPELINES:      ${profileData.telemetry.visionPipelinesDeployed} Active Deployed`,
+    `STATUS:         SYSTEM ONLINE // NORMAL`,
+  ].join('\n'),
+
+  sudo: () => 'vishal is not in the sudoers file. This incident will be logged.',
+  ls: () => 'drwxr-xr-x  projects/   drwxr-xr-x  experience/   -rw-r--r--  notebook.txt   -rw-r--r--  skills.md',
+  'cat notebook.txt': () => `[CURRENTLY]\n${profileData.notebook.currently}\n\n[USUALLY FOUND]\n${profileData.notebook.usuallyFound}`,
 };
+
+const SUGGESTIONS = ['help', 'whoami', 'skills', 'projects', 'experience', 'contact', 'clear'];
 
 export default function AboutSection() {
   const [history, setHistory] = useState([
-    { t: 'sys', v: 'Vishal Dhawal // CV & Applied AI Shell v1.0' },
-    { t: 'sys', v: 'Type "help" for available commands.' },
+    { t: 'sys', v: 'Vishal Dhawal // Interactive Terminal v2.4 [Online]' },
+    { t: 'sys', v: 'Type a command or click any shortcut chip below to explore.' },
   ]);
   const [input, setInput] = useState('');
+  const [cmdHistoryList, setCmdHistoryList] = useState([]);
+  const [histIndex, setHistIndex] = useState(-1);
   const [copied, setCopied] = useState(false);
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent | error
+  const [formStatus, setFormStatus] = useState('idle');
 
-  const runCmd = (e) => {
-    e.preventDefault();
-    const cmd = input.trim().toLowerCase();
-    if (!cmd) return;
-    const next = [...history, { t: 'in', v: `$ ${input}` }];
+  const terminalBodyRef = useRef(null);
+  const inputRef = useRef(null);
 
-    if (cmd === 'clear') { setHistory([]); setInput(''); return; }
-
-    const fn = COMMANDS[cmd];
-    if (fn) {
-      next.push({ t: 'out', v: fn() });
-    } else {
-      next.push({ t: 'err', v: `Command not found: "${cmd}". Type "help".` });
+  // Auto scroll to bottom of terminal
+  useEffect(() => {
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
     }
+  }, [history]);
+
+  const executeCommand = (cmdText) => {
+    const rawCmd = (cmdText || '').trim();
+    if (!rawCmd) return;
+
+    const cmd = rawCmd.toLowerCase();
+    const next = [...history, { t: 'in', v: `$ ${rawCmd}` }];
+
+    setCmdHistoryList(prev => [...prev, rawCmd]);
+    setHistIndex(-1);
+
+    if (cmd === 'clear' || cmd === 'cls') {
+      setHistory([]);
+      setInput('');
+      return;
+    }
+
+    const handler = COMMANDS[cmd];
+    if (handler) {
+      next.push({ t: 'out', v: handler() });
+    } else {
+      next.push({ t: 'err', v: `zsh: command not found: "${cmd}". Type "help" for a list of commands.` });
+    }
+
     setHistory(next);
     setInput('');
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    executeCommand(input);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (cmdHistoryList.length === 0) return;
+      const nextIdx = histIndex === -1 ? cmdHistoryList.length - 1 : Math.max(0, histIndex - 1);
+      setHistIndex(nextIdx);
+      setInput(cmdHistoryList[nextIdx]);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (histIndex === -1) return;
+      const nextIdx = histIndex + 1;
+      if (nextIdx >= cmdHistoryList.length) {
+        setHistIndex(-1);
+        setInput('');
+      } else {
+        setHistIndex(nextIdx);
+        setInput(cmdHistoryList[nextIdx]);
+      }
+    }
   };
 
   const copyEmail = () => {
@@ -48,7 +161,7 @@ export default function AboutSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const submitForm = async (e) => {
+  const submitContactForm = async (e) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
 
@@ -102,49 +215,58 @@ export default function AboutSection() {
             Who Is Behind<br />
             <span style={{ color: 'var(--cyan)' }}>The Work?</span>
           </h2>
+          <p className="text-[var(--text-secondary)] max-w-xl text-base leading-relaxed reveal" data-delay="100">
+            {profileData.tagline}
+          </p>
         </div>
 
+        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-          {/* Left: Notebook + Skills (7 cols) */}
+          {/* Left: Engineer's Notebook & Skills (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
 
-            {/* Notebook */}
-            <div className="card p-7 relative reveal">
-              <div className="hud-corner hud-corner-tl" />
-              <div className="hud-corner hud-corner-br" />
-
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-[var(--border-subtle)]">
-                <span className="font-mono text-[0.68rem] font-bold text-[var(--cyan)]">
+            {/* Notebook Card */}
+            <div className="card p-7 reveal">
+              <div className="flex items-center justify-between mb-5 pb-3 border-b border-[var(--border-subtle)]">
+                <span className="font-mono text-xs font-bold text-[var(--cyan)]">
                   ENGINEER_NOTEBOOK // {profileData.name.toUpperCase()}
                 </span>
                 <span className="font-mono text-[0.65rem] text-[var(--text-muted)]">OPEN</span>
               </div>
 
-              <div className="space-y-5">
-                {[
-                  { key: 'CURRENTLY', val: profileData.notebook.currently, color: 'var(--cyan)' },
-                  { key: 'USUALLY FOUND', val: profileData.notebook.usuallyFound, color: 'var(--emerald)' },
-                  { key: 'INTERESTED IN', val: profileData.notebook.interestedIn, color: 'var(--cyan)' },
-                  { key: 'OUTSIDE CODE', val: profileData.notebook.outsideCode, color: 'var(--warm)' },
-                ].map(item => (
-                  <div key={item.key}>
-                    <span className="font-mono text-[0.65rem] font-bold block mb-1.5 uppercase" style={{ color: item.color }}>
-                      [{item.key}]
-                    </span>
-                    <p className="text-[0.85rem] text-[var(--text-secondary)] leading-relaxed">{item.val}</p>
-                  </div>
-                ))}
+              <div className="space-y-4 font-mono text-xs text-[var(--text-secondary)] leading-relaxed">
+                <div>
+                  <div className="text-[var(--cyan)] mb-1 font-bold">[CURRENTLY]</div>
+                  <p>{profileData.notebook.currently}</p>
+                </div>
+                <div>
+                  <div className="text-[var(--emerald)] mb-1 font-bold">[USUALLY FOUND]</div>
+                  <p>{profileData.notebook.usuallyFound}</p>
+                </div>
+                <div>
+                  <div className="text-[var(--amber)] mb-1 font-bold">[INTERESTED IN]</div>
+                  <p>{profileData.notebook.interestedIn}</p>
+                </div>
+                <div>
+                  <div className="text-[var(--warm)] mb-1 font-bold">[OUTSIDE CODE]</div>
+                  <p>{profileData.notebook.outsideCode}</p>
+                </div>
               </div>
             </div>
 
             {/* Skills Matrix */}
-            <div className="card p-6 reveal" data-delay="80">
-              <span className="label block mb-5">TECHNICAL CAPABILITIES</span>
+            <div className="card p-7 reveal" data-delay="80">
+              <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[var(--border-subtle)]">
+                <span className="font-mono text-xs font-bold text-[var(--cyan)]">
+                  SYSTEM_CAPABILITIES // SKILLS MATRIX
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {profileData.skillsMatrix.map((cat, i) => (
                   <div
-                    key={i}
+                    key={cat.category}
                     className="p-4 rounded-lg"
                     style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}
                   >
@@ -163,61 +285,117 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right: Terminal + Contact (5 cols) */}
+          {/* Right: Active Terminal + Contact (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
 
-            {/* Terminal */}
+            {/* Active Developer Terminal */}
             <div
-              className="rounded-xl overflow-hidden reveal"
-              style={{ border: '1px solid rgba(0,240,255,0.25)', background: '#06070a' }}
+              onClick={() => inputRef.current?.focus()}
+              className="rounded-xl overflow-hidden reveal cursor-text transition-all duration-300 group"
+              style={{
+                border: '1px solid rgba(0,240,255,0.3)',
+                background: '#06070a',
+                boxShadow: '0 0 35px rgba(0,240,255,0.06)',
+              }}
             >
               {/* Titlebar */}
               <div
-                className="px-4 py-2.5 flex items-center gap-2 border-b border-[rgba(255,255,255,0.06)]"
-                style={{ background: '#0d1018' }}
+                className="px-4 py-2.5 flex items-center justify-between border-b border-[rgba(255,255,255,0.08)] select-none"
+                style={{ background: '#0c0f18' }}
               >
-                <div className="w-2.5 h-2.5 rounded-full bg-[var(--rose)]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[var(--amber)]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[var(--emerald)]" />
-                <span className="font-mono text-[0.65rem] text-[var(--text-muted)] ml-2">
-                  vishal@vision — shell
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--rose)] cursor-pointer" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--amber)] cursor-pointer" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--emerald)] cursor-pointer" />
+                  <span className="font-mono text-[0.68rem] text-[var(--text-muted)] ml-2 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] anim-pulse" />
+                    vishal@vision — interactive shell
+                  </span>
+                </div>
+                <span className="font-mono text-[0.6rem] text-[var(--cyan)] font-bold px-1.5 py-0.5 rounded bg-[rgba(0,240,255,0.1)]">
+                  ACTIVE
                 </span>
-                <Terminal size={12} className="ml-auto" style={{ color: 'var(--cyan)' }} />
               </div>
 
-              {/* Output */}
+              {/* Terminal Logs Viewport */}
               <div
-                className="p-4 font-mono text-xs space-y-1.5 overflow-y-auto"
-                style={{ minHeight: 180, maxHeight: 240 }}
+                ref={terminalBodyRef}
+                className="p-4 font-mono text-xs space-y-2 overflow-y-auto"
+                style={{ minHeight: 220, maxHeight: 290 }}
               >
                 {history.map((item, idx) => (
-                  <div key={idx}>
-                    {item.t === 'sys' && <div style={{ color: 'var(--text-muted)' }}>{item.v}</div>}
-                    {item.t === 'in'  && <div style={{ color: 'var(--cyan)' }}>{item.v}</div>}
-                    {item.t === 'out' && (
-                      <div style={{ color: 'var(--text-main)', borderLeft: '2px solid rgba(0,240,255,0.3)', paddingLeft: 8 }}>
-                        {item.v.split('\n').map((line, li) => <div key={li}>{line}</div>)}
+                  <div key={idx} className="leading-relaxed">
+                    {item.t === 'sys' && (
+                      <div className="text-[var(--text-muted)] text-[0.72rem]">{item.v}</div>
+                    )}
+                    {item.t === 'in' && (
+                      <div className="text-[var(--cyan)] font-bold flex items-center gap-1.5">
+                        <span className="text-[var(--emerald)]">➜</span>
+                        <span>{item.v}</span>
                       </div>
                     )}
-                    {item.t === 'err' && <div style={{ color: 'var(--rose)' }}>{item.v}</div>}
+                    {item.t === 'out' && (
+                      <div className="text-[var(--text-main)] border-l-2 border-[var(--cyan)] pl-3 py-1 my-1 bg-[rgba(0,240,255,0.02)] rounded-r text-[0.75rem] whitespace-pre-wrap font-mono">
+                        {item.v}
+                      </div>
+                    )}
+                    {item.t === 'err' && (
+                      <div className="text-[var(--rose)] border-l-2 border-[var(--rose)] pl-3 py-0.5 text-[0.75rem]">
+                        {item.v}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
 
-              {/* Input */}
-              <form
-                onSubmit={runCmd}
-                className="flex items-center gap-2 px-4 py-3 border-t border-[rgba(255,255,255,0.06)]"
-                style={{ background: '#0a0c13' }}
+              {/* Quick Clickable Suggestions / Shortcuts */}
+              <div
+                className="px-4 py-2 border-t border-[rgba(255,255,255,0.06)] flex items-center gap-1.5 overflow-x-auto no-scrollbar"
+                style={{ background: 'rgba(0,0,0,0.5)' }}
               >
-                <span className="font-mono text-xs text-[var(--cyan)]">$</span>
+                <span className="font-mono text-[0.6rem] text-[var(--text-muted)] shrink-0">
+                  SUGGEST:
+                </span>
+                {SUGGESTIONS.map(s => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      executeCommand(s);
+                    }}
+                    className="interactive font-mono text-[0.62rem] px-2 py-0.5 rounded bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(0,240,255,0.15)] text-[var(--text-secondary)] hover:text-[var(--cyan)] transition-colors border border-[rgba(255,255,255,0.06)] hover:border-[rgba(0,240,255,0.3)] shrink-0 cursor-pointer"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+
+              {/* Real Input Line */}
+              <form
+                onSubmit={handleFormSubmit}
+                className="flex items-center gap-2 px-4 py-3 border-t border-[rgba(255,255,255,0.08)]"
+                style={{ background: '#090c14' }}
+              >
+                <span className="font-mono text-xs text-[var(--emerald)] font-bold">vishal@vision:~$</span>
                 <input
+                  ref={inputRef}
+                  type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder="help · skills · github · linkedin"
-                  className="interactive w-full bg-transparent border-0 font-mono text-xs text-white focus:outline-none"
-                  style={{ color: 'var(--text-main)', caretColor: 'var(--cyan)' }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="type a command (e.g. whoami, skills, projects)..."
+                  className="interactive w-full bg-transparent border-0 font-mono text-xs text-white focus:outline-none placeholder:text-[var(--text-muted)] placeholder:text-[0.7rem]"
+                  style={{ caretColor: 'var(--cyan)' }}
+                  autoComplete="off"
+                  spellCheck="false"
                 />
+                <button
+                  type="submit"
+                  className="interactive font-mono text-[0.62rem] text-[var(--cyan)] px-2 py-1 rounded bg-[rgba(0,240,255,0.1)] border border-[rgba(0,240,255,0.3)] hover:bg-[rgba(0,240,255,0.2)] transition-all cursor-pointer flex items-center gap-1"
+                >
+                  RUN <CornerDownLeft size={10} />
+                </button>
               </form>
             </div>
 
@@ -239,7 +417,8 @@ export default function AboutSection() {
                     <div className="label mb-0">GITHUB</div>
                     <a
                       href={profileData.github}
-                      target="_blank" rel="noopener noreferrer"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="interactive font-mono text-xs font-semibold text-white hover:text-[var(--cyan)] transition-colors"
                     >
                       github.com/Visshu78
@@ -248,10 +427,12 @@ export default function AboutSection() {
                 </div>
                 <a
                   href={profileData.github}
-                  target="_blank" rel="noopener noreferrer"
-                  className="interactive btn btn-cyan text-[0.68rem] py-1.5 px-3"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn text-xs py-1.5 px-3"
+                  style={{ textDecoration: 'none' }}
                 >
-                  VISIT
+                  View
                 </a>
               </div>
 
@@ -261,94 +442,79 @@ export default function AboutSection() {
                 style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}
               >
                 <div className="flex items-center gap-3">
-                  <Mail size={18} style={{ color: 'var(--cyan)' }} />
+                  <Mail size={18} style={{ color: 'var(--emerald)' }} />
                   <div>
                     <div className="label mb-0">EMAIL</div>
-                    <span className="font-mono text-xs text-white">{profileData.email}</span>
+                    <span className="font-mono text-xs text-white">
+                      {profileData.email}
+                    </span>
                   </div>
                 </div>
                 <button
                   onClick={copyEmail}
-                  className="interactive p-2 rounded border border-[var(--border-subtle)] bg-transparent"
-                  style={{ cursor: 'pointer', color: copied ? 'var(--emerald)' : 'var(--text-secondary)' }}
+                  className="interactive btn text-xs py-1.5 px-3"
+                  style={{ color: copied ? 'var(--emerald)' : undefined }}
                 >
-                  {copied ? <Check size={14} /> : <Copy size={14} />}
+                  {copied ? <><Check size={12} /> Copied</> : <><Copy size={12} /> Copy</>}
                 </button>
               </div>
 
-              {/* LinkedIn */}
-              <div
-                className="flex items-center justify-between p-3 rounded-lg mb-3"
-                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}
-              >
-                <div className="flex items-center gap-3">
-                  <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect width="4" height="12" x="2" y="9" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                  <div>
-                    <div className="label mb-0">LINKEDIN</div>
-                    <a
-                      href={profileData.linkedin}
-                      target="_blank" rel="noopener noreferrer"
-                      className="interactive font-mono text-xs font-semibold text-white hover:text-[var(--cyan)] transition-colors"
-                    >
-                      vishal-dhawal
-                    </a>
-                  </div>
+              {/* Live Formspree Direct Message Form */}
+              <form onSubmit={submitContactForm} className="space-y-3 pt-4 border-t border-[var(--border-subtle)]">
+                <div className="font-mono text-[0.65rem] text-[var(--cyan)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] anim-pulse" />
+                  <span>Direct Encrypted Transmission</span>
                 </div>
-                <a
-                  href={profileData.linkedin}
-                  target="_blank" rel="noopener noreferrer"
-                  className="interactive btn btn-ghost text-[0.68rem] py-1.5 px-3"
-                >
-                  VISIT
-                </a>
-              </div>
 
-              {/* Form */}
-              <form onSubmit={submitForm} className="space-y-3">
-                {/* Helper text */}
-                <p className="font-mono text-[0.65rem] text-[var(--text-muted)] leading-relaxed">
-                  Message goes directly to my inbox — no email app needed.
-                </p>
-                {['name', 'email'].map(field => (
+                <div className="grid grid-cols-2 gap-3">
                   <input
-                    key={field}
-                    type={field}
-                    placeholder={field === 'name' ? 'Your Name' : 'Your Email'}
-                    value={formState[field]}
-                    onChange={e => setFormState(s => ({ ...s, [field]: e.target.value }))}
+                    type="text"
                     required
-                    className="interactive w-full bg-[rgba(0,0,0,0.3)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[rgba(0,240,255,0.4)] transition-colors"
-                    style={{ fontFamily: 'var(--font-mono)', caretColor: 'var(--cyan)' }}
+                    value={formState.name}
+                    onChange={e => setFormState(f => ({ ...f, name: e.target.value }))}
+                    placeholder="Your Name"
+                    className="interactive w-full font-mono text-xs p-3 rounded-lg border border-[var(--border-subtle)] bg-[rgba(0,0,0,0.3)] text-white focus:outline-none focus:border-[var(--cyan)] transition-colors"
                   />
-                ))}
+                  <input
+                    type="email"
+                    required
+                    value={formState.email}
+                    onChange={e => setFormState(f => ({ ...f, email: e.target.value }))}
+                    placeholder="Your Email"
+                    className="interactive w-full font-mono text-xs p-3 rounded-lg border border-[var(--border-subtle)] bg-[rgba(0,0,0,0.3)] text-white focus:outline-none focus:border-[var(--cyan)] transition-colors"
+                  />
+                </div>
+
                 <textarea
-                  rows={3}
-                  placeholder="Your message or inquiry..."
-                  value={formState.message}
-                  onChange={e => setFormState(s => ({ ...s, message: e.target.value }))}
                   required
-                  className="interactive w-full bg-[rgba(0,0,0,0.3)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[rgba(0,240,255,0.4)] transition-colors resize-none"
-                  style={{ fontFamily: 'var(--font-mono)', caretColor: 'var(--cyan)' }}
+                  rows={3}
+                  value={formState.message}
+                  onChange={e => setFormState(f => ({ ...f, message: e.target.value }))}
+                  placeholder="Transmission Payload / Message..."
+                  className="interactive w-full font-mono text-xs p-3 rounded-lg border border-[var(--border-subtle)] bg-[rgba(0,0,0,0.3)] text-white focus:outline-none focus:border-[var(--cyan)] transition-colors resize-none"
                 />
+
                 <button
                   type="submit"
-                  disabled={formStatus === 'sending'}
-                  className="interactive btn btn-cyan w-full justify-center"
-                  style={{ opacity: formStatus === 'sending' ? 0.7 : 1, cursor: formStatus === 'sending' ? 'wait' : 'pointer' }}
+                  disabled={formStatus === 'sending' || formStatus === 'sent'}
+                  className="interactive btn btn-primary w-full justify-center text-xs py-2.5 font-mono"
+                  style={{
+                    background: formStatus === 'sent' ? 'var(--emerald)' : undefined,
+                    borderColor: formStatus === 'sent' ? 'var(--emerald)' : undefined,
+                    color: formStatus === 'sent' ? '#000' : undefined,
+                  }}
                 >
-                  {formStatus === 'sending' && <><span style={{ display:'inline-block', width:12, height:12, border:'1.5px solid currentColor', borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.7s linear infinite', marginRight:6 }} /> SENDING...</>}
-                  {formStatus === 'sent'    && <><Check size={14} /> MESSAGE RECEIVED — I'LL BE IN TOUCH</>}
-                  {formStatus === 'error'   && <><Send size={13} /> FAILED — TRY AGAIN</>}
-                  {formStatus === 'idle'    && <><Send size={13} /> SEND MESSAGE</>}
+                  {formStatus === 'sending' && <>Transmitting Payload...</>}
+                  {formStatus === 'sent' && <><Check size={14} /> Message Received</>}
+                  {formStatus === 'error' && <>Transmission Failed — Retrying...</>}
+                  {formStatus === 'idle' && <><Send size={13} /> Transmit Message</>}
                 </button>
               </form>
             </div>
+
           </div>
         </div>
+
       </div>
     </section>
   );
