@@ -4,14 +4,56 @@ import {
   X, BookOpen, Feather, Code2, Clock, Search, 
   ArrowLeft, ExternalLink, Sparkles, SlidersHorizontal, Share2, Check, Download, FileText
 } from 'lucide-react';
-import { GithubIcon } from './Icons';
+import { GithubIcon, MediumIcon } from './Icons';
 
 export default function WritingArchiveModal({ isOpen, onClose }) {
-  const [activeCategory, setActiveCategory] = useState('all'); // all | technical | papers | poetry
+  const [activeCategory, setActiveCategory] = useState('all'); // all | medium | technical | papers | poetry
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState('normal'); // normal | large
+  const [mediumPosts, setMediumPosts] = useState([]);
+
+  // Auto-fetch live Medium RSS feed
+  useEffect(() => {
+    async function fetchMediumFeed() {
+      try {
+        const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@visshu78');
+        const data = await res.json();
+        if (data && data.items && Array.isArray(data.items)) {
+          const cleaned = data.items.map((item, idx) => {
+            const cleanText = item.description
+              ? item.description.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').slice(0, 180).trim() + '...'
+              : 'Read full essay on Medium...';
+            const dateObj = new Date(item.pubDate);
+            const formattedDate = isNaN(dateObj.getTime())
+              ? item.pubDate.split(' ')[0]
+              : dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            return {
+              id: `med-modal-${idx}`,
+              title: item.title.replace(/&amp;/g, '&'),
+              date: formattedDate,
+              isExternal: true,
+              externalUrl: item.link,
+              typeTag: 'medium',
+              typeLabel: 'Medium Article (Live)',
+              color: 'var(--warm)',
+              summary: cleanText,
+              readTime: 'Medium Post',
+              categories: item.categories || [],
+            };
+          });
+          setMediumPosts(cleaned);
+        }
+      } catch (err) {
+        console.error('Medium feed fetch error in modal:', err);
+      }
+    }
+    if (isOpen) {
+      fetchMediumFeed();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -37,9 +79,10 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
 
   // Combine items
   const allItems = [
-    ...technicalNotes.map(n => ({ ...n, typeTag: 'technical', typeLabel: 'Technical Essay', color: 'var(--cyan)' })),
+    ...mediumPosts,
     ...paperDeconstructions.map(p => ({ ...p, typeTag: 'papers', typeLabel: 'Paper Deconstruction', color: 'var(--emerald)' })),
-    ...poetryWritings.map(p => ({ ...p, typeTag: 'poetry', typeLabel: 'Poetry & Reflection', color: 'var(--warm)', summary: p.body.slice(0, 140) + '...' })),
+    ...technicalNotes.map(n => ({ ...n, typeTag: 'technical', typeLabel: 'Technical Essay', color: 'var(--cyan)' })),
+    ...poetryWritings.map(p => ({ ...p, typeTag: 'poetry', typeLabel: 'Poetry & Reflection', color: '#f43f5e', summary: p.body.slice(0, 140) + '...' })),
     {
       id: 'paper-repo-link',
       title: 'Open Source Research Papers Breakdown Archive',
@@ -208,7 +251,7 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
             {/* Body */}
             <div className={`font-serif leading-[2.1] text-[rgba(238,240,248,0.9)] space-y-6 ${fontSize === 'large' ? 'text-xl' : 'text-lg'}`}>
               {selectedPiece.typeTag === 'poetry' ? (
-                <div className="whitespace-pre-line pl-6 border-l-2 border-[rgba(255,200,133,0.3)] italic">
+                <div className="whitespace-pre-line pl-6 border-l-2 border-[rgba(244,63,94,0.3)] italic">
                   {selectedPiece.body}
                 </div>
               ) : (
@@ -238,8 +281,8 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
             {selectedPiece.isExternal && (
               <div className="mt-12 p-6 rounded-xl bg-[rgba(0,240,255,0.04)] border border-[rgba(0,240,255,0.2)] flex items-center justify-between gap-4">
                 <div>
-                  <div className="font-mono text-xs text-[var(--cyan)] font-bold mb-1">OPEN GITHUB REPOSITORY</div>
-                  <div className="text-sm text-[var(--text-secondary)]">Read full deconstructions and analogies in the code repository.</div>
+                  <div className="font-mono text-xs text-[var(--cyan)] font-bold mb-1">OPEN SOURCE REFERENCE</div>
+                  <div className="text-sm text-[var(--text-secondary)]">Read full deconstructions, code, and analogies.</div>
                 </div>
                 <a
                   href={selectedPiece.externalUrl}
@@ -247,7 +290,7 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
                   rel="noopener noreferrer"
                   className="interactive btn btn-cyan text-xs shrink-0"
                 >
-                  Explore on GitHub <ExternalLink size={12} />
+                  Explore <ExternalLink size={12} />
                 </a>
               </div>
             )}
@@ -276,13 +319,13 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
             {/* Header */}
             <div className="text-center max-w-2xl mx-auto mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 font-mono text-[0.7rem] text-[var(--warm)] bg-[rgba(255,200,133,0.08)] border border-[rgba(255,200,133,0.2)]">
-                <Sparkles size={12} /> COMPLETE WRITING & RESEARCH ARCHIVE
+                <Sparkles size={12} /> COMPLETE WRITING, MEDIUM & RESEARCH ARCHIVE
               </div>
               <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-[var(--text-main)] mb-3">
                 The Notebook, Papers & Essays
               </h1>
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed font-serif italic text-base">
-                Technical thoughts on Computer Vision and AI systems, intuitive analogies for landmark research papers, and poems written in quiet evenings.
+                Live articles auto-synchronized from Medium, intuitive analogies for landmark research papers, technical essays, and quiet poems.
               </p>
             </div>
 
@@ -312,8 +355,9 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
                 {[
                   { id: 'all', label: 'All Works' },
-                  { id: 'technical', label: 'Technical Essays' },
+                  { id: 'medium', label: 'Medium (Live)' },
                   { id: 'papers', label: 'Paper Deconstructions' },
+                  { id: 'technical', label: 'Technical Essays' },
                   { id: 'poetry', label: 'Poetry' },
                 ].map(cat => (
                   <button
@@ -371,11 +415,11 @@ export default function WritingArchiveModal({ isOpen, onClose }) {
 
                     <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-[0.68rem] font-mono text-[var(--text-muted)]">
                       <span className="flex items-center gap-1">
-                        {item.typeTag === 'poetry' ? <Feather size={12} /> : item.typeTag === 'papers' ? <FileText size={12} /> : <Code2 size={12} />}
+                        {item.typeTag === 'poetry' ? <Feather size={12} /> : item.typeTag === 'papers' ? <FileText size={12} /> : item.typeTag === 'medium' ? <MediumIcon size={12} /> : <Code2 size={12} />}
                         {item.readTime || 'Poem'}
                       </span>
                       <span className="text-[var(--cyan)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 font-semibold">
-                        {item.isExternal ? 'View on GitHub ↗' : 'Read Breakdown →'}
+                        {item.isExternal ? 'Read Article ↗' : 'Read Breakdown →'}
                       </span>
                     </div>
                   </div>
